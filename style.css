@@ -6,7 +6,8 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f5f5;
+  background-color: rgb(32, 32, 32);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,7 +17,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
   height: 75px;
   border-bottom: 1px solid #e0e0e0;
 }
@@ -25,7 +25,7 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: space-between;
-  background-color: #f5f5f5;
+  background-color: rgb(63, 63, 63);
 }
 
 .container {
@@ -35,12 +35,10 @@ body {
 
 .memory-container {
   display: grid;
-  /* padding-left: 20%;
-  padding-right: 20%; */
   margin: 10px;
-  /* padding-top: 50px; */
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(6, 1fr);
+  background-color: rgb(63, 63, 63);
   gap: 5px;
 }
 
@@ -94,4 +92,12 @@ body {
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
+}
+
+
+@media only screen and (max-width: 800px) {
+   .card_base, .card_open, .card_closed, .card_found {
+    height: 100px;
+    width: 100px;
+}
 }

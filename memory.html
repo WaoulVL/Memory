@@ -1,129 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Memory</title>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Memory</h1>
-        </div>
-
-        <div class="statistics">
-            <div class="game-info">
-                <h2>Stats</h2>
-                <p>Verlopen tijd: 0.0s</p>
-                <p>Score: 0</p>
-                <p>Resterende toontijd:</p>
-                <progress id="time" value="80" max="100"></progress>
-            </div>
-
-            <div class="top-players">
-                <h2>Top spelers</h2>
-                <ul>
-                    <li>1. Bob</li>
-                    <li>2. Henk</li>
-                    <li>3. Tobias</li>
-                    <li>4. Obama</li>
-                    <li>5. Gert</li>
-                </ul>
-            </div>
-
-            <div class="settings-container">
-                <h2>Instellingen</h2>
-                <ul>
-                    <li>
-                        <p>Gesloten speelkaart karakter: </p>
-                        <select>
-                            <option value="+">+</option>
-                            <option value="-">-</option>
-                            <option value=" "> </option>
-                        </select>
-                    </li>
-                    <li>
-                        <p>Afmeting speelbord: </p>
-                        <input type="number" min="2" max="10" value="6">
-                    </li>
-                    <li>
-                        <p>Kleur gesloten kaarten: </p>
-                        <div class="color-container">
-                            <button>Verander kleur</button>
-                            <div class="color-display" style="background-color: green;"></div>
-                        </div>
-                    </li>
-                    <li>
-                        <p>Kleur open kaarten: </p>
-                        <div class="color-container">
-                            <button>Verander kleur</button>
-                            <div class="color-display" style="background-color: greenyellow;"></div>
-                        </div>
-                    </li>
-                    <li>
-                        <p>Kleur gevonden kaarten: </p>
-                        <div class="color-container">
-                            <button>Verander kleur</button>
-                            <div class="color-display" style="background-color: blue;"></div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>Memory</title>
+    </head>
+    <body>
         <div class="container">
-            <button class="start-button">Start Game</button>
-        </div>
+            <div class="header">
+                <h1>Memory</h1>
+            </div>
 
-        <div class="memory-container">
-            <div class="card_closed">
-                <p class="card_text">Closed card</p>
-            </div>
-            <div class="card_open">
-                <p class="card_text">Open card</p>
-            </div>
-            <div class="card_found">
-                <p class="card_text">Found card</p>
-            </div>
-            <div class="card_found">
-                <p class="card_text">Found card</p>
-            </div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-            <div class="card_closed"></div>
-        </div>
+            <div class="statistics">
+                <div class="game-info">
+                    <h2>Stats</h2>
+                    <p>Verlopen tijd: 0.0s</p>
+                    <p>Score: 0</p>
+                    <p>Resterende toontijd:</p>
+                    <progress id="time" value="80" max="100"></progress>
+                </div>
 
-    </div>
-</body>
+                <div class="top-players">
+                    <h2>Top spelers</h2>
+                    <ul>
+                        <li>1. Bob: 100</li>
+                        <li>2. Henk: 200</li>
+                        <li>3. Tobias: 300</li>
+                        <li>4. Obama: 400</li>
+                        <li>5. Gert: 500</li>
+                    </ul>
+                    <p>Totaal gemiddelde speeltijd: 0.0s</p>
+                </div>
+
+                <div class="settings-container">
+                    <h2>Instellingen</h2>
+                    <ul>
+                        <li>
+                            <p>Gesloten speelkaart karakter: </p>
+                            <select>
+                                <option value="+">+</option>
+                                <option value="-">-</option>
+                                <option value=" "> </option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>Afmeting speelbord: </p>
+                            <input type="number" min="2" max="10" value="6">
+                        </li>
+                        <li>
+                            <p>Kleur gesloten kaarten: </p>
+                            <div class="color-container">
+                                <button>Verander kleur</button>
+                                <div class="color-display" style="background-color: green;"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <p>Kleur open kaarten: </p>
+                            <div class="color-container">
+                                <button>Verander kleur</button>
+                                <div class="color-display" style="background-color: greenyellow;"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <p>Kleur gevonden kaarten: </p>
+                            <div class="color-container">
+                                <button>Verander kleur</button>
+                                <div class="color-display" style="background-color: blue;"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container">
+                <button class="start-button">Start Game</button>
+            </div>
+
+            <div class="memory-container">
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_open">
+                    <p class="card_text">Open card</p>
+                </div>
+                <div class="card_found">
+                    <p class="card_text">Found card</p>
+                </div>
+                <div class="card_found">
+                    <p class="card_text">Found card</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+                <div class="card_closed">
+                    <p class="card_text">+</p>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
