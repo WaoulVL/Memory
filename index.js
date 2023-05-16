@@ -20,13 +20,32 @@ function generateRandomLetters(count = 18) {
     return chosenLetters
 }
 
-function test_letters() {
-    var cards = document.getElementById("memory-container").querySelectorAll(".card_closed");
-    var randomLetters = generateRandomLetters(18);
+function run() {
+    const memoryContainer = document.getElementById("memory-container");
+    const startButton = document.getElementById("start-button")
 
-    for (var i = 0; i < cards.length; i++) {
-        cards[i].querySelector('.card_text').innerHTML = randomLetters[i % 18];
-    }
+    startButton.addEventListener("click", function() {
+        var cardCount = document.getElementById("board-width").value * document.getElementById("board-width").value;
+        var cardsHTML = "";
+        for (var i = 0; i < cardCount; i++) {
+            cardsHTML += '<div class="card_closed"><p class="card_text">+</p></div>';
+        }
+    
+        memoryContainer.innerHTML = cardsHTML;
+        
+        var letterCount = cardCount / 2
+        var cards = document.getElementById("memory-container").querySelectorAll(".card_closed");
+        var randomLetters = generateRandomLetters(letterCount);
+    
+        for (var i = 0; i < letterCount; i++) {
+            const letter = randomLetters[i % letterCount]; // change
+    
+            cards[i].addEventListener("click", function() {
+                cards[i].querySelector('.card_text').innerHTML = letter
+            })
+        }
+    })
+    
 }
 
 function openCard() {

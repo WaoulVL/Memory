@@ -61,6 +61,13 @@ body {
   align-items: center;
 }
 
+.card_base:hover,
+.card_open:hover,
+.card_closed:hover,
+.card_found:hover {
+  transform: scale(0.95);
+}
+
 .card_open {
   background-color: greenyellow;
 }
