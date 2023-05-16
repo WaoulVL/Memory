@@ -61,6 +61,7 @@ function run() {
         var cards = document.getElementById("memory-container").querySelectorAll(".card_closed");
         var randomLetters = generateRandomLetters(letterCount);
     
+        // Card logic
         var OpenedCard = null
         for (var i = 0; i < cardCount; i++) {
             const letter = randomLetters[i % letterCount];
@@ -89,16 +90,4 @@ function run() {
           }
     })
     
-}
-
-function openCard() {
-
-}
-
-function closeCard() {
-
-}
-
-function pairFound () {
-
 }
