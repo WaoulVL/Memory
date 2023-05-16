@@ -25,11 +25,14 @@ function run() {
     const startButton = document.getElementById("start-button")
 
     startButton.addEventListener("click", function() {
-        var cardCount = document.getElementById("board-width").value * document.getElementById("board-width").value;
+        const width = document.getElementById("board-width").value
+        var cardCount = width * width
         var cardsHTML = "";
         for (var i = 0; i < cardCount; i++) {
             cardsHTML += '<div class="card_closed"><p class="card_text">+</p></div>';
         }
+        memoryContainer.style.gridTemplateRows = "repeat(" + width + ", 1fr)";
+        memoryContainer.style.gridTemplateColumns = "repeat(" + width + ", 1fr)";
     
         memoryContainer.innerHTML = cardsHTML;
         
@@ -38,12 +41,14 @@ function run() {
         var randomLetters = generateRandomLetters(letterCount);
     
         for (var i = 0; i < letterCount; i++) {
-            const letter = randomLetters[i % letterCount]; // change
-    
-            cards[i].addEventListener("click", function() {
-                cards[i].querySelector('.card_text').innerHTML = letter
-            })
-        }
+            const letter = randomLetters[i % letterCount];
+          
+            (function(letter) {
+              cards[i].addEventListener("click", function() {
+                this.querySelector('.card_text').innerHTML = letter;
+              });
+            })(letter);
+          }
     })
     
 }
