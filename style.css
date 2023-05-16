@@ -33,7 +33,7 @@ body {
   justify-content: center;
 }
 
-.memory-container {
+#memory-container {
   display: grid;
   margin: 10px;
   grid-template-columns: repeat(6, 1fr);

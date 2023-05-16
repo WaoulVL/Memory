@@ -21,7 +21,12 @@ function generateRandomLetters(count = 18) {
 }
 
 function test_letters() {
-    document.getElementById("java_test").innerHTML = generateRandomLetters(5)
+    var cards = document.getElementById("memory-container").querySelectorAll(".card_closed");
+    var randomLetters = generateRandomLetters(18);
+
+    for (var i = 0; i < cards.length; i++) {
+        cards[i].querySelector('.card_text').innerHTML = randomLetters[i % 18];
+    }
 }
 
 function openCard() {
