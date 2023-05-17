@@ -120,6 +120,16 @@ function run() {
                             lockCard(openCard2)
                             openCard1 = null
                             openCard2 = null
+                        } else {
+                            // No match found
+                            setTimeout(function() {
+                                hideCard(openCard1)
+                                setCardDisplayValue(openCard1, closedCharacter)
+                                hideCard(openCard2)
+                                setCardDisplayValue(openCard2, closedCharacter)
+                                openCard1 = null
+                                openCard2 = null
+                            }, 1000)
                         }
                     }
                 })
@@ -127,3 +137,4 @@ function run() {
           }
     })
 }
+
