@@ -134,12 +134,12 @@ function run() {
                             // No match found
                             setTimeout(function() {
                                 if (getCardDisplayValue(openCard1) !== getCardDisplayValue(openCard2)) {
-                                hideCard(openCard1)
-                                setCardDisplayValue(openCard1, closedCharacter)
-                                hideCard(openCard2)
-                                setCardDisplayValue(openCard2, closedCharacter)
-                                openCard1 = null
-                                openCard2 = null
+                                    hideCard(openCard1)
+                                    setCardDisplayValue(openCard1, closedCharacter)
+                                    hideCard(openCard2)
+                                    setCardDisplayValue(openCard2, closedCharacter)
+                                    openCard1 = null
+                                    openCard2 = null
                                 }
                             }, 1000)
                         }
