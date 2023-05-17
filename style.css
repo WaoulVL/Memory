@@ -42,6 +42,16 @@ body {
   gap: 5px;
 }
 
+#start-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#win-message {
+  margin-left: 7px;
+}
+
 .settings-container {
   padding-bottom: 10px;;
 }
@@ -100,7 +110,6 @@ body {
   border-width: 1px;
   border-radius: 5px;
 }
-
 
 @media only screen and (min-width: 800px) {
    .card_base, .card_open, .card_closed, .card_found {

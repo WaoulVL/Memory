@@ -32,6 +32,7 @@ function generateCardValues(cardCount = 36) {
     return valueSet
 }
 
+// Class changing functions
 function revealCard(card) {
     card.classList.remove("card_closed")
     card.classList.add("card_open")
@@ -45,10 +46,15 @@ function lockCard(card) {
     card.classList.add("card_found")
 }
 
+// Checking functions
 function isCardClosed(card) {
     return card.classList.contains("card_closed")
 }
+function isCardFound(card) {
+    return card.classList.contains("card_found")
+}
 
+// Card value functions
 function getCardDisplayValue(card) {
     return card.querySelector('.card_text').innerHTML
 }
@@ -62,6 +68,9 @@ function run() {
 
     // Start new game
     startButton.addEventListener("click", function() {
+        // Hide win message
+        document.getElementById("win-message").style.display = 'none';
+
         // Gather settings
         const width = document.getElementById("board-width").value
         const closedCharacter = document.getElementById("closed-character").value
@@ -85,7 +94,7 @@ function run() {
         var openCard2 = null
 
         for (var i = 0; i < cardCount; i++) {
-            const letter = cardsValues[i];
+            const cardValue = cardsValues[i];
           
             (function() {
                 cards[i].addEventListener("click", function() {
@@ -106,8 +115,9 @@ function run() {
 
                     // Reveal clicked card
                     revealCard(this)
-                    setCardDisplayValue(this, letter)
+                    setCardDisplayValue(this, cardValue)
 
+                    // Matching logic
                     if (openCard1 === null) {
                         // First card clicked
                         openCard1 = this;
@@ -121,6 +131,20 @@ function run() {
                             openCard1 = null
                             openCard2 = null
                         }
+                    }
+                    
+                    // Check if game has been won
+                    var isGameWon = true;
+                    for (var ii = 0; ii < cards.length; ii++) {
+                        if (!isCardFound(cards[ii])) {
+                            isGameWon = false;
+                            break
+                        }
+                    }
+
+                    if (isGameWon) {
+                        // Un-hide winning message
+                        document.getElementById("win-message").style.display = '';
                     }
                 })
             })()
