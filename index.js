@@ -33,16 +33,20 @@ function generateCardValues(cardCount = 36) {
 }
 
 function revealCard(card) {
-    card.classList.remove("card_closed");
-    card.classList.add("card_open");
+    card.classList.remove("card_closed")
+    card.classList.add("card_open")
 }
 function hideCard(card) {
-    card.classList.remove("card_open");
-    card.classList.add("card_closed");
+    card.classList.remove("card_open")
+    card.classList.add("card_closed")
 }
 function lockCard(card) {
-    card.classList.remove("card_open");
-    card.classList.add("card_found");
+    card.classList.remove("card_open")
+    card.classList.add("card_found")
+}
+
+function isCardClosed(card) {
+    return card.classList.contains("card_closed")
 }
 
 function getCardDisplayValue(card) {
@@ -85,6 +89,11 @@ function run() {
           
             (function() {
                 cards[i].addEventListener("click", function() {
+                    // Ignore clicks on already opened/revealed cards
+                    if (!isCardClosed(this)) {
+                        return
+                    }
+
                     if (!(openCard1 === null) && !(openCard2 === null)) {
                         // Third card clicked, hide previously revealed cards
                         hideCard(openCard1)
