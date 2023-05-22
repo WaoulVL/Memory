@@ -20,10 +20,29 @@ function generateUniqueRandomLetters(letterCount = 18) {
     return chosenLetters
 }
 
-// Function returns randomised card values with 2 copies per value
-function generateCardValues(cardCount = 36) {
-    var valueSet = generateUniqueRandomLetters(cardCount / 2)
+// Function returns specified amount of unique random numbers
+function generateUniqueRandomNumbers(numberCount = 18) {
+    const numbers = Array.from({ length: numberCount }, (_, index) => index + 1);
+    shuffleArray(numbers);
+    return numbers;
+  }
+  
 
+// Function returns randomised card values with 2 copies per value
+function generateCardValues(cardCount = 36, cardType = 'letters') {
+    var valueSet
+    switch(cardType) {
+        case 'letters':
+            valueSet = generateUniqueRandomLetters(cardCount / 2)
+            break
+        case 'numbers':
+            valueSet = generateUniqueRandomNumbers(cardCount / 2)
+            break
+        case 'dogs':
+            valueSet = generateUniqueRandomLetters(cardCount / 2)
+            break
+    }
+    
     for (var i = 0; i < cardCount / 2; i++) {
         // Create an extra copy for each value
         valueSet.push(valueSet[i])
@@ -34,62 +53,71 @@ function generateCardValues(cardCount = 36) {
 
 // Class changing functions
 function revealCard(card) {
-    card.classList.remove("card_closed")
-    card.classList.add("card_open")
+    card.classList.remove("card-closed")
+    card.classList.add("card-open")
 }
 function hideCard(card) {
-    card.classList.remove("card_open")
-    card.classList.add("card_closed")
+    card.classList.remove("card-open")
+    card.classList.add("card-closed")
 }
 function lockCard(card) {
-    card.classList.remove("card_open")
-    card.classList.add("card_found")
+    card.classList.remove("card-open")
+    card.classList.add("card-found")
 }
 
 // Checking functions
 function isCardClosed(card) {
-    return card.classList.contains("card_closed")
+    return card.classList.contains("card-closed")
 }
 function isCardFound(card) {
-    return card.classList.contains("card_found")
+    return card.classList.contains("card-found")
 }
 
 // Card value functions
 function getCardDisplayValue(card) {
-    return card.querySelector('.card_text').innerHTML
+    return card.querySelector('.card-text').innerHTML
 }
 function setCardDisplayValue(card, value) {
-    card.querySelector('.card_text').innerHTML = value
+    card.querySelector('.card-text').innerHTML = value
 }
 
 function run() {
-    const memoryContainer = document.getElementById("memory-container");
+    const memoryContainer = document.getElementById("memory-container")
     const startButton = document.getElementById("start-button")
 
     // Start new game
     startButton.addEventListener("click", function() {
         // Hide win message
-        document.getElementById("win-message").style.display = 'none';
+        document.getElementById("win-message").style.display = 'none'
 
         // Gather settings
         const width = document.getElementById("board-width").value
         const closedCharacter = document.getElementById("closed-character").value
+        const cardType = document.getElementById("card-type").value
 
-        // Generate card HTML
+        // Generate cards HTML
+        var cardHTML = ""
+        var cardsHTML = ""
+        if (cardType == "letters" || cardType == "numbers") {
+            // Text based cards
+            cardHTML = '<div class="card-closed"><p class="card-text">' + closedCharacter + '</p></div>'
+        } else {
+            // Image based cards
+            cardHTML = '<div class="card-closed"><img src="images/closed-card-image.png" class="card-image"></img></div>'
+        }
         var cardCount = width * width
-        var cardsHTML = "";
         for (var i = 0; i < cardCount; i++) {
-            cardsHTML += '<div class="card_closed"><p class="card_text">' + closedCharacter + '</p></div>';
+            cardsHTML += cardHTML
         }
         memoryContainer.innerHTML = cardsHTML;
 
         // Change grid layout
-        memoryContainer.style.gridTemplateRows = "repeat(" + width + ", 1fr)";
-        memoryContainer.style.gridTemplateColumns = "repeat(" + width + ", 1fr)";
+        memoryContainer.style.gridTemplateRows = "repeat(" + width + ", 1fr)"
+        memoryContainer.style.gridTemplateColumns = "repeat(" + width + ", 1fr)"
     
         // Card logic
-        var cards = document.getElementById("memory-container").querySelectorAll(".card_closed");
-        var cardsValues = generateCardValues(cardCount)
+        var cards = document.getElementById("memory-container").querySelectorAll(".card-closed")
+        var cardsValues = generateCardValues(cardCount, cardType)
         var openCard1 = null
         var openCard2 = null
 
@@ -130,18 +158,6 @@ function run() {
                             lockCard(openCard2)
                             openCard1 = null
                             openCard2 = null
-                        } else if (getCardDisplayValue(openCard1) !== getCardDisplayValue(openCard2)){
-                            // No match found
-                            setTimeout(function() {
-                                if (getCardDisplayValue(openCard1) !== getCardDisplayValue(openCard2)) {
-                                    hideCard(openCard1)
-                                    setCardDisplayValue(openCard1, closedCharacter)
-                                    hideCard(openCard2)
-                                    setCardDisplayValue(openCard2, closedCharacter)
-                                    openCard1 = null
-                                    openCard2 = null
-                                }
-                            }, 1000)
                         }
                     }
                     
@@ -153,7 +169,6 @@ function run() {
                             break
                         }
                     }
-
                     if (isGameWon) {
                         // Un-hide winning message
                         document.getElementById("win-message").style.display = '';
