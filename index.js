@@ -81,6 +81,16 @@ function setCardDisplayValue(card, value) {
     card.querySelector('.card-text').innerHTML = value
 }
 
+// Function updates card colors from color pickers
+function updateColor() {
+    const pickerOpen = document.getElementById("color-picker-open")
+    const pickerClosed = document.getElementById("color-picker-closed")
+    const pickerFound = document.getElementById("color-picker-found")
+    document.documentElement.style.setProperty("--card-open-color", pickerOpen.value);
+    document.documentElement.style.setProperty("--card-closed-color", pickerClosed.value);
+    document.documentElement.style.setProperty("--card-found-color", pickerFound.value);
+}
+
 function run() {
     const memoryContainer = document.getElementById("memory-container")
     const startButton = document.getElementById("start-button")
@@ -110,6 +120,9 @@ function run() {
             cardsHTML += cardHTML
         }
         memoryContainer.innerHTML = cardsHTML;
+
+        // Change card color
+        updateColor()
 
         // Change grid layout
         memoryContainer.style.gridTemplateRows = "repeat(" + width + ", 1fr)"
