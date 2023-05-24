@@ -29,8 +29,8 @@ function generateUniqueRandomNumbers(numberCount = 18) {
   
 
 // Function returns randomised card values with 2 copies per value
-function generateCardValues(cardCount = 36, cardType = 'letters') {
-    var valueSet
+async function generateCardValues(cardCount = 36, cardType = 'letters') {
+    var valueSet = []
     switch(cardType) {
         case 'letters':
             valueSet = generateUniqueRandomLetters(cardCount / 2)
@@ -39,24 +39,26 @@ function generateCardValues(cardCount = 36, cardType = 'letters') {
             valueSet = generateUniqueRandomNumbers(cardCount / 2)
             break
         case 'dogs':
-                new Promise((resolve, reject) => {
-                //make a request
-                getApiImages('dogs', cardCount / 2)
-                    .then((data) => {
-                        resolve(data)
-                    })
-                    .catch((error) => {
-                        reject(error)
-                    })
-            })
+            try {
+                const images = await getApiImages('dogs', cardCount / 2);
+                valueSet = images;
+              } catch {
+                throw new error("Failed to get dog images")
+            }
+            break
         case 'cats':
-            valueSet = getApiImages('cats', cardCount / 2)
+            try {
+                const images = await getApiImages('cats', cardCount / 2);
+                valueSet = images;
+              } catch {
+                throw new error("Failed to get cat images")
+            }
             break
     }
-    for (var i = 0; i < cardCount / 2; i++) {
-        // Create an extra copy for each value
-        valueSet.push(valueSet[i])
-    }
+
+    // Create an extra copy for each value
+    valueSet = valueSet.concat(valueSet);
+
     shuffleArray(valueSet)
     return valueSet
 }
@@ -107,45 +109,45 @@ function getApiImages(cardType = "dogs", imageCount = 18) {
         var imageURLs = [];
         switch (cardType) {
             case 'dogs':
-              var apiURL = 'https://dog.ceo/api/breeds/image/random/' + imageCount;
-              fetch(apiURL)
+                var apiURL = 'https://dog.ceo/api/breeds/image/random/' + imageCount;
+                fetch(apiURL)
                 .then((response) => {
-                  if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                  }
-                  return response.json();
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
                 })
                 .then((data) => {
-                for (var i = 0; i < imageCount; i++) {
-                    imageURLs.push(data.message[i]);
-                }
-                resolve(imageURLs);
+                    for (var i = 0; i < imageCount; i++) {
+                        imageURLs.push(data.message[i]);
+                    }
+                    resolve(imageURLs);
                 })
                 .catch((error) => {
                 reject(error);
                 });
             break
 
-            case "cats":
-            var apiURL =
-                "https://api.thecatapi.com/v1/images/search?limit=" + imageCount + "&breed_ids=beng&api_key=live_mcM2SvZ2sNm0CzL9eoYx3QoykICpt3ece0yOH7yMbCtZE5AYWritFAXH3pAAwv8m";
-            fetch(apiURL)
+            case 'cats':
+                var apiURL = 'https://api.thecatapi.com/v1/images/search?limit=' + imageCount + '&breed_ids=beng&api_key=live_mcM2SvZ2sNm0CzL9eoYx3QoykICpt3ece0yOH7yMbCtZE5AYWritFAXH3pAAwv8m'
+                fetch(apiURL)
                 .then(function (response) {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    return response.json();
                 })
                 .then(function (data) {
-                for (var i = 0; i < imageCount; i++) {
+                    for (var i = 0; i < imageCount; i++) {
                     imageURLs.push(data[i].url);
-                }
-                resolve(imageURLs);
+                    }
+                    resolve(imageURLs);
                 })
                 .catch(function (error) {
-                reject(error);
-                })
-            break
+                    reject(error);
+                });
+                break;
+
             default:
             reject(new Error("Invalid card type"))
         }
@@ -163,7 +165,6 @@ function updateColor() {
 }
 
 function run() {
-    getApiImages()
     const memoryContainer = document.getElementById("memory-container")
     const startButton = document.getElementById("start-button")
 
@@ -177,11 +178,10 @@ function run() {
         const closedCharacter = document.getElementById("closed-character").value
         const cardType = document.getElementById("card-type").value
 
-        var closedDisplayValue = ""
-
         // Generate cards HTML
         var cardHTML = ""
         var cardsHTML = ""
+        var closedDisplayValue = ""
         if (cardType == "letters" || cardType == "numbers") {
             // Text based cards
             cardHTML = '<div class="card-closed"><p class="card-text">' + closedCharacter + '</p></div>'
@@ -206,65 +206,71 @@ function run() {
     
         // Card logic
         var cards = document.getElementById("memory-container").querySelectorAll(".card-closed")
-        var cardsValues = generateCardValues(cardCount, cardType)
-        var openCard1 = null
-        var openCard2 = null
+        // var cardsValues = generateCardValues(cardCount, cardType)
 
-        for (var i = 0; i < cardCount; i++) {
-            const cardValue = cardsValues[i];
-          
-            (function() {
-                cards[i].addEventListener("click", function() {
-                    // Ignore clicks on already opened/revealed cards
-                    if (!isCardClosed(this)) {
-                        return
-                    }
+        let cardsValues
+        generateCardValues(cardCount, cardType)
+        .then((generatedValues) => {
+            cardsValues = generatedValues
+            var openCard1 = null
+            var openCard2 = null
 
-                    if (!(openCard1 === null) && !(openCard2 === null)) {
-                        // Third card clicked, hide previously revealed cards
-                        hideCard(openCard1)
-                        setCardDisplayValue(openCard1, closedDisplayValue)
-                        hideCard(openCard2)
-                        setCardDisplayValue(openCard2, closedDisplayValue)
-                        openCard1 = null
-                        openCard2 = null
-                    }
+            for (var i = 0; i < cardCount; i++) {
+                const cardValue = cardsValues[i];
+            
+                (function() {
+                    cards[i].addEventListener("click", function() {
+                        // Ignore clicks on already opened/revealed cards
+                        if (!isCardClosed(this)) {
+                            return
+                        }
 
-                    // Reveal clicked card
-                    revealCard(this)
-                    setCardDisplayValue(this, cardValue)
-
-                    // Matching logic
-                    if (openCard1 === null) {
-                        // First card clicked
-                        openCard1 = this;
-                    } else if (openCard2 === null) {
-                        // Second card clicked
-                        openCard2 = this;
-                        if (getCardDisplayValue(openCard1) === getCardDisplayValue(openCard2)) {
-                            // Match found
-                            lockCard(openCard1)
-                            lockCard(openCard2)
+                        if (!(openCard1 === null) && !(openCard2 === null)) {
+                            // Third card clicked, hide previously revealed cards
+                            hideCard(openCard1)
+                            setCardDisplayValue(openCard1, closedDisplayValue)
+                            hideCard(openCard2)
+                            setCardDisplayValue(openCard2, closedDisplayValue)
                             openCard1 = null
                             openCard2 = null
                         }
-                    }
-                    
-                    // Check if game has been won
-                    var isGameWon = true;
-                    for (var ii = 0; ii < cards.length; ii++) {
-                        if (!isCardFound(cards[ii])) {
-                            isGameWon = false;
-                            break
+
+                        // Reveal clicked card
+                        revealCard(this)
+                        setCardDisplayValue(this, cardValue)
+
+                        // Matching logic
+                        if (openCard1 === null) {
+                            // First card clicked
+                            openCard1 = this;
+                        } else if (openCard2 === null) {
+                            // Second card clicked
+                            openCard2 = this;
+                            if (getCardDisplayValue(openCard1) === getCardDisplayValue(openCard2)) {
+                                // Match found
+                                lockCard(openCard1)
+                                lockCard(openCard2)
+                                openCard1 = null
+                                openCard2 = null
+                            }
                         }
-                    }
-                    if (isGameWon) {
-                        // Un-hide winning message
-                        document.getElementById("win-message").style.display = '';
-                    }
-                })
-            })()
-          }
+                        
+                        // Check if game has been won
+                        var isGameWon = true;
+                        for (var ii = 0; ii < cards.length; ii++) {
+                            if (!isCardFound(cards[ii])) {
+                                isGameWon = false;
+                                break
+                            }
+                        }
+                        if (isGameWon) {
+                            // Un-hide winning message
+                            document.getElementById("win-message").style.display = '';
+                        }
+                    })
+                })()
+            }
+        })
     })
 }
 
