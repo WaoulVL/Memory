@@ -126,8 +126,7 @@ function getApiImages(cardType = "dogs", imageCount = 18) {
                 .catch((error) => {
                 reject(error);
                 });
-            break
-
+                break
             case 'cats':
                 var apiURL = 'https://api.thecatapi.com/v1/images/search?limit=' + imageCount + '&breed_ids=beng&api_key=live_mcM2SvZ2sNm0CzL9eoYx3QoykICpt3ece0yOH7yMbCtZE5AYWritFAXH3pAAwv8m'
                 fetch(apiURL)
@@ -147,7 +146,6 @@ function getApiImages(cardType = "dogs", imageCount = 18) {
                     reject(error);
                 });
                 break;
-
             default:
             reject(new Error("Invalid card type"))
         }
