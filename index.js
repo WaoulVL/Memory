@@ -39,10 +39,20 @@ function generateCardValues(cardCount = 36, cardType = 'letters') {
             valueSet = generateUniqueRandomNumbers(cardCount / 2)
             break
         case 'dogs':
-            valueSet = generateUniqueRandomLetters(cardCount / 2)
+                new Promise((resolve, reject) => {
+                //make a request
+                getApiImages('dogs', cardCount / 2)
+                    .then((data) => {
+                        resolve(data)
+                    })
+                    .catch((error) => {
+                        reject(error)
+                    })
+            })
+        case 'cats':
+            valueSet = getApiImages('cats', cardCount / 2)
             break
     }
-    
     for (var i = 0; i < cardCount / 2; i++) {
         // Create an extra copy for each value
         valueSet.push(valueSet[i])
@@ -75,10 +85,71 @@ function isCardFound(card) {
 
 // Card value functions
 function getCardDisplayValue(card) {
-    return card.querySelector('.card-text').innerHTML
+    var cardImageElement = card.querySelector('.card-image')
+    if (cardImageElement) {
+        return cardImageElement.src
+    } else {
+        return card.querySelector('.card-text').textContent
+    }
 }
 function setCardDisplayValue(card, value) {
-    card.querySelector('.card-text').innerHTML = value
+    var cardImageElement = card.querySelector('.card-image')
+    if (cardImageElement) {
+        cardImageElement.src = value
+    } else {
+        card.querySelector('.card-text').textContent = value
+    }
+}
+
+// Image API request functions
+function getApiImages(cardType = "dogs", imageCount = 18) {
+    return new Promise((resolve, reject) => {
+        var imageURLs = [];
+        switch (cardType) {
+            case 'dogs':
+              var apiURL = 'https://dog.ceo/api/breeds/image/random/' + imageCount;
+              fetch(apiURL)
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                for (var i = 0; i < imageCount; i++) {
+                    imageURLs.push(data.message[i]);
+                }
+                resolve(imageURLs);
+                })
+                .catch((error) => {
+                reject(error);
+                });
+            break
+
+            case "cats":
+            var apiURL =
+                "https://api.thecatapi.com/v1/images/search?limit=" + imageCount + "&breed_ids=beng&api_key=live_mcM2SvZ2sNm0CzL9eoYx3QoykICpt3ece0yOH7yMbCtZE5AYWritFAXH3pAAwv8m";
+            fetch(apiURL)
+                .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+                })
+                .then(function (data) {
+                for (var i = 0; i < imageCount; i++) {
+                    imageURLs.push(data[i].url);
+                }
+                resolve(imageURLs);
+                })
+                .catch(function (error) {
+                reject(error);
+                })
+            break
+            default:
+            reject(new Error("Invalid card type"))
+        }
+    });
 }
 
 // Function updates card colors from color pickers
@@ -92,6 +163,7 @@ function updateColor() {
 }
 
 function run() {
+    getApiImages()
     const memoryContainer = document.getElementById("memory-container")
     const startButton = document.getElementById("start-button")
 
@@ -105,15 +177,19 @@ function run() {
         const closedCharacter = document.getElementById("closed-character").value
         const cardType = document.getElementById("card-type").value
 
+        var closedDisplayValue = ""
+
         // Generate cards HTML
         var cardHTML = ""
         var cardsHTML = ""
         if (cardType == "letters" || cardType == "numbers") {
             // Text based cards
             cardHTML = '<div class="card-closed"><p class="card-text">' + closedCharacter + '</p></div>'
+            closedDisplayValue = closedCharacter
         } else {
             // Image based cards
             cardHTML = '<div class="card-closed"><img src="images/closed-card-image.png" class="card-image"></img></div>'
+            closedDisplayValue = "images/closed-card-image.png"
         }
         var cardCount = width * width
         for (var i = 0; i < cardCount; i++) {
@@ -147,9 +223,9 @@ function run() {
                     if (!(openCard1 === null) && !(openCard2 === null)) {
                         // Third card clicked, hide previously revealed cards
                         hideCard(openCard1)
-                        setCardDisplayValue(openCard1, closedCharacter)
+                        setCardDisplayValue(openCard1, closedDisplayValue)
                         hideCard(openCard2)
-                        setCardDisplayValue(openCard2, closedCharacter)
+                        setCardDisplayValue(openCard2, closedDisplayValue)
                         openCard1 = null
                         openCard2 = null
                     }
