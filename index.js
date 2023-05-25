@@ -132,13 +132,13 @@ function getApiImages(cardType = "dogs", imageCount = 18) {
                 fetch(apiURL)
                 .then(function (response) {
                     if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                        throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(function (data) {
                     for (var i = 0; i < imageCount; i++) {
-                    imageURLs.push(data[i].url);
+                        imageURLs.push(data[i].url);
                     }
                     resolve(imageURLs);
                 })

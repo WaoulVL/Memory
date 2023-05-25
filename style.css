@@ -105,6 +105,7 @@ body {
   height: 100%;
   padding: 10px;
   box-sizing: border-box;
+  font-size: 25px;
 }
 
 .card-image {
