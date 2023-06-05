@@ -4,9 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register</title>
 </head>
 <body>
-    
+    <form action="/memory-backend-master/create/create_users.sh">
+
+        <h1>Register</h1>
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Username">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Password">
+
+        <label for="repeat-password">Repeat password</label>
+        <input type="password" name="repeat-password" id="repeat-password" placeholder="Repeat password">
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Email">
+        <input type="submit" value="Register">
+
+    </form>
 </body>
 </html>
