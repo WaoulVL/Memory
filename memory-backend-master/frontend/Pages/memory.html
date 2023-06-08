@@ -7,6 +7,11 @@
         <link rel="stylesheet" href="/memory-backend-master/frontend/style.css">
         <script src="/memory-backend-master/frontend/index.js"></script>
         <title>Memory</title>
+        <script>
+            function redirectToLoginPage() {
+                window.location.href = "login.html";
+            }
+        </script>
     </head>
     <body onload="run()">
         <div class="container">
@@ -34,6 +39,9 @@
                     </ul>
                     <p>Totaal gemiddelde speeltijd: 0.0s</p>
                 </div>
+
+                <!-- Button naar login -->
+                <!-- <button onclick="redirectToLoginPage()">Login</button> -->
 
                 <div id="settings-container">
                     <h2>Instellingen</h2>
