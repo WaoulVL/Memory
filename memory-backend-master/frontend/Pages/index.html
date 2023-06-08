@@ -29,6 +29,8 @@
         
     <form>
         <button id="btn" value="">Check de connectie</button>
+        <button id="login_test" value="">Doe een login test, krijg token</button>
+        <button id="register_test" value="">Doe een register test</button>
     </form>
 
     <p id="result"></p>
@@ -48,7 +50,55 @@
         })
     }
 
-    check()
+    const login_test = () => {
+        event.preventDefault()
+        fetch('http://localhost:8000/api/login_check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: 'Karel',
+            password: 'karel'
+        })
+        })
+        .then(response => {
+            if (response.status === 200) {
+                console.log('Inloggen gelukt');
+                document.getElementById('result').innerHTML = 'Inloggen gelukt'
+            } else if (response.status === 401) {
+                console.log('Inloggen niet gelukt')
+                document.getElementById('result').innerHTML = 'Inloggen niet gelukt'
+            }
+        })
+    }
+
+    const register_test = () => {
+        fetch('http://localhost:8000/register', {
+        method: 'POST',
+        body: JSON.stringify({
+            username: 'Karel',
+            email: 'karel@karel',
+            password: 'karel'
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        })
+        .then(response => {
+            if (response.status === 201) {
+                console.log('Registreren gelukt')
+                document.getElementById('result').innerHTML = 'Registreren gelukt'
+            } else {
+                console.log('Registreren niet gelukt')
+                document.getElementById('result').innerHTML = 'Registreren niet gelukt'
+            }
+        })
+    }
+
+    //check()
     document.getElementById('btn').addEventListener('click', c => check() )
+    document.getElementById('login_test').addEventListener('click', c => login_test())
+    document.getElementById('register_test').addEventListener('click', c => register_test())
 </script>
 </html>
