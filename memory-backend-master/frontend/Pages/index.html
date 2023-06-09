@@ -29,8 +29,10 @@
         
     <form>
         <button id="btn" value="">Check de connectie</button>
-        <button id="login_test" value="">Doe een login test, krijg token</button>
         <button id="register_test" value="">Doe een register test</button>
+        <button id="login_test" value="">Doe een login test, krijg token</button>
+        <button id="id_test" value="">Krijg id uit opgeslagen JWT</button>
+        <button id="data_test" value="">Krijg data uit API met verkregen JWT</button>
     </form>
 
     <p id="result"></p>
@@ -40,6 +42,7 @@
 <script>
 
     const check = () => {
+        event.preventDefault()
         fetch('http://localhost:8000/frontend')
         .then( resp => resp.json() )
         .then( json => {
@@ -53,27 +56,35 @@
     const login_test = () => {
         event.preventDefault()
         fetch('http://localhost:8000/api/login_check', {
-        method: 'POST',
-        headers: {
+            method: 'POST',
+            headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+            },
+            body: JSON.stringify({
             username: 'Karel',
             password: 'karel'
-        })
+            })
         })
         .then(response => {
             if (response.status === 200) {
-                console.log('Inloggen gelukt');
-                document.getElementById('result').innerHTML = 'Inloggen gelukt'
-            } else if (response.status === 401) {
+                console.log('Inloggen gelukt')
+                return response.json()
+            } else {
                 console.log('Inloggen niet gelukt')
-                document.getElementById('result').innerHTML = 'Inloggen niet gelukt'
+            }
+        })
+        .then(data => {
+            if (data.token) {
+                console.log("Token: " + data.token)
+                localStorage.setItem('jwtToken', data.token)
+            } else {
+                console.log('JWT token niet gevonden')
             }
         })
     }
 
     const register_test = () => {
+        event.preventDefault()
         fetch('http://localhost:8000/register', {
         method: 'POST',
         body: JSON.stringify({
@@ -96,9 +107,62 @@
         })
     }
 
-    //check()
+    const createAPIHeaders = () => {
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        jwtToken = localStorage.getItem("jwtToken")
+        if (jwtToken) {
+            headers['Authorization'] = `Bearer ${jwtToken}`
+        }
+        return headers
+    }
+
+    const printPlayerData = (playerID) => {
+        const url = `http://localhost:8000/api/player/${playerID}`
+
+        fetch(url, {
+            method: 'GET',
+            headers: createAPIHeaders()
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+        })
+        .then(data => {
+            console.log("Gevonden player data: ")
+            console.log(data)
+        })
+    }
+
+    function getPlayerIdFromJWT(jwtToken) {
+        const tokenParts = jwtToken.split('.')
+
+        const encodedPayload = tokenParts[1]
+        const decodedPayload = atob(encodedPayload)
+        const payload = JSON.parse(decodedPayload)
+
+        return payload.sub
+    }
+
+    const player_id_test = () => {
+        event.preventDefault()
+        const id = getPlayerIdFromJWT(localStorage.getItem("jwtToken"))
+        console.log("Gevonden player id: " + id)
+        return id
+    }
+
+    const data_test = () => {
+        event.preventDefault()
+        const id = getPlayerIdFromJWT(localStorage.getItem("jwtToken"))
+        printPlayerData(id)
+    }
+
     document.getElementById('btn').addEventListener('click', c => check() )
     document.getElementById('login_test').addEventListener('click', c => login_test())
     document.getElementById('register_test').addEventListener('click', c => register_test())
+    document.getElementById('id_test').addEventListener('click', c => player_id_test())
+    document.getElementById('data_test').addEventListener('click', c => data_test())
 </script>
 </html>
