@@ -68,9 +68,11 @@
         .then(response => {
             if (response.status === 200) {
                 console.log('Inloggen gelukt')
+                document.getElementById('result').innerHTML = 'Inloggen gelukt'
                 return response.json()
             } else {
                 console.log('Inloggen niet gelukt')
+                document.getElementById('result').innerHTML = 'Inloggen niet gelukt'
             }
         })
         .then(data => {
@@ -131,6 +133,7 @@
             }
         })
         .then(data => {
+            document.getElementById('result').innerHTML = 'Zie console voor opgehaalde data'
             console.log("Gevonden player data: ")
             console.log(data)
         })
@@ -149,6 +152,7 @@
     const player_id_test = () => {
         event.preventDefault()
         const id = getPlayerIdFromJWT(localStorage.getItem("jwtToken"))
+        document.getElementById('result').innerHTML = "Gevonden player id: " + id
         console.log("Gevonden player id: " + id)
         return id
     }
