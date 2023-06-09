@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Logging out</title>
+    </head>
+    <body>
+        <p>Logging out and redirecting...</p>        
+    </body>
+
+    <script>
+        localStorage.removeItem("jwtToken")
+        window.location.href = "memory.html"
+    </script>
+</html>
+
+
+localStorage.removeItem("jwtToken")

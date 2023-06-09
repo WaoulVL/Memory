@@ -33,6 +33,7 @@
         <button id="login_test" value="">Doe een login test, krijg token</button>
         <button id="id_test" value="">Krijg id uit opgeslagen JWT</button>
         <button id="data_test" value="">Krijg data uit API met verkregen JWT</button>
+        <button id="logout_test" value="">Test logout door verwijderen JWT</button>
     </form>
 
     <p id="result"></p>
@@ -79,10 +80,15 @@
             if (data.token) {
                 console.log("Token: " + data.token)
                 localStorage.setItem('jwtToken', data.token)
+                window.location.href = 'memory.html';
             } else {
                 console.log('JWT token niet gevonden')
             }
         })
+    }
+
+    const logout_test = () => {
+        localStorage.removeItem("jwtToken")
     }
 
     const register_test = () => {
@@ -168,5 +174,6 @@
     document.getElementById('register_test').addEventListener('click', c => register_test())
     document.getElementById('id_test').addEventListener('click', c => player_id_test())
     document.getElementById('data_test').addEventListener('click', c => data_test())
+    document.getElementById('logout_test').addEventListener('click', c => logout_test())
 </script>
 </html>

@@ -162,9 +162,69 @@ function updateColor() {
     document.documentElement.style.setProperty("--card-found-color", pickerFound.value);
 }
 
+const createAPIHeaders = () => {
+    const headers = {
+        'Content-Type': 'application/json'
+    }
+    jwtToken = localStorage.getItem("jwtToken")
+    if (jwtToken) {
+        headers['Authorization'] = `Bearer ${jwtToken}`
+    }
+    return headers
+}
+
+function getPlayerIdFromJWT(jwtToken) {
+    const tokenParts = jwtToken.split('.')
+
+    const encodedPayload = tokenParts[1]
+    const decodedPayload = atob(encodedPayload)
+    const payload = JSON.parse(decodedPayload)
+
+    return payload.sub
+}
+
+function loadUserData() {
+    const jwtToken = localStorage.getItem("jwtToken")
+    const isLoggedIn = jwtToken != null
+
+    const loginBtn = document.getElementById("login_btn")
+    const registerBtn = document.getElementById("register_btn")
+    const logoutBtn = document.getElementById("logout_btn")
+    if (isLoggedIn) {
+        // Update user data
+        const id = getPlayerIdFromJWT(jwtToken)
+        const url = `http://localhost:8000/api/player/${id}`
+
+        fetch(url, {
+            method: 'GET',
+            headers: createAPIHeaders()
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+        })
+        .then(data => {
+            document.getElementById('welcome-message').innerHTML = 'Welkom ' + data.name + '!'
+        })
+
+        // Update button visibility
+        loginBtn.style.display = "none"
+        registerBtn.style.display = "none"
+        logoutBtn.style.display = ""
+    } else {
+        // Update button visibility
+        loginBtn.style.display = ""
+        registerBtn.style.display = ""
+        logoutBtn.style.display = "none"
+    }
+}
+
 function run() {
     const memoryContainer = document.getElementById("memory-container")
     const startButton = document.getElementById("start-button")
+
+    loadUserData()
 
     // Start new game
     startButton.addEventListener("click", function() {

@@ -1,70 +1,89 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Scores jonguh!</title>
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-form {border: 3px solid #f1f1f1;}
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+      <style>
+      body {font-family: Arial, Helvetica, sans-serif;}
+      form {border: 3px solid #f1f1f1;}
 
-input[type=text], input[type=password] { width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; box-sizing: border-box; }
-button { background-color: #04AA6D; color: white; padding: 14px 20px; margin: 8px 0; border: none; cursor: pointer; width: 100%; }
-button:hover { opacity: 0.8; }
-.cancelbtn { width: auto; padding: 10px 18px; background-color: #f44336; }
-.imgcontainer { text-align: center; margin: 24px 0 12px 0; }
-img.avatar { width: 10vw; border-radius: 50%; }
-.container { padding: 16px; }
-span.psw { float: right; padding-top: 16px; }
-#players { font-family: Arial, Helvetica, sans-serif; border-collapse: collapse; width:90vw; display:none; }
-#players td, #players th { border: 1px solid #ddd; padding: 8px; }
-#players tr:nth-child(even){background-color: #f2f2f2;}
-#players tr:hover {background-color: #ddd;}
-#players th { padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #04AA6D; color: white; }
+      input[type=text], input[type=password] { width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; box-sizing: border-box; }
+      button { background-color: #04AA6D; color: white; padding: 14px 20px; margin: 8px 0; border: none; cursor: pointer; width: 100%; }
+      button:hover { opacity: 0.8; }
+      .cancelbtn { width: auto; padding: 10px 18px; background-color: #f44336; }
+      .imgcontainer { text-align: center; margin: 24px 0 12px 0; }
+      img.avatar { width: 10vw; border-radius: 50%; }
+      .container { padding: 16px; }
+      span.psw { float: right; padding-top: 16px; }
+      #players { font-family: Arial, Helvetica, sans-serif; border-collapse: collapse; width:90vw; display:none; }
+      #players td, #players th { border: 1px solid #ddd; padding: 8px; }
+      #players tr:nth-child(even){background-color: #f2f2f2;}
+      #players tr:hover {background-color: #ddd;}
+      #players th { padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #04AA6D; color: white; }
 
+      /* Change styles for span and cancel button on extra small screens */
+      @media screen and (max-width: 300px) { span.psw { display: block; float: none; } .cancelbtn { width: 100%; } }
+      </style>
+  </head>
+  <body>
+    <h2>Vul hier uw gegevens in</h2>
 
+    <form id="form" action="/action_page.php" method="post">
+      <div class="imgcontainer">
+        <img src="img_avatar2.png" alt="Avatar" class="avatar">
+      </div>
 
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) { span.psw { display: block; float: none; } .cancelbtn { width: 100%; } }
-</style>
-</head>
-<body>
+      <div class="container">
+        <label for="username"><b>Gebruikersnaam:</b></label>
+        <input type="text" id="username"placeholder="Gebruikersnaam" name="username" required>
 
-<h2>Vul hier uw gegevens in</h2>
+        <label for="password"><b>Wachtwoord:</b></label>
+        <input type="password" id="password" placeholder="Wachtwoord" name="password" required>
+            
+        <button type="button" id="submit">Login</button>
+      </div>
+    </form>
+  </body>
 
-<form id="form" action="/action_page.php" method="post">
-  <div class="imgcontainer">
-    <img src="img_avatar2.png" alt="Avatar" class="avatar">
-  </div>
+  <script> 
+      const login_submit = () => {
+        event.preventDefault()
 
-  <div class="container">
-    <label for="username"><b>Gebruikersnaam:</b></label>
-    <input type="text" placeholder="Doe gebruikersnaam hier" name="username" required>
+        const usernameValue = document.getElementById("username").value
+        const passwordValue = document.getElementById("password").value
 
-    <label for="password"><b>Wachtwoord:</b></label>
-    <input type="password" placeholder="Wachtwoord hiero" name="password" required>
-        
-    <button type="button" id="submit">Toon die scores!</button>
-  </div>
-</form>
+        console.log(usernameValue)
+        console.log(passwordValue)
 
-<table id="players">
-    <th>Positie</th>
-    <th>Naam</th>
-    <th>Score</th>
-</table>
-
-
-<template id="scores">
-    <tr>
-        <th></th>
-        <td class="naam"></td>
-        <td class="score"></td>
-    </tr>
-</template>
-
-</body>
-
-<script> 
-// YOUR CODE HERE
-</script>
+        fetch('http://localhost:8000/api/login_check', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username: usernameValue,
+              password: passwordValue,
+            })
+        })
+        .then(response => {
+            if (response.status === 200) {
+                console.log('Inloggen gelukt')
+                return response.json()
+            } else {
+                console.log('Inloggen niet gelukt')
+            }
+        })
+        .then(data => {
+            if (data.token) {
+                console.log("Token: " + data.token)
+                localStorage.setItem('jwtToken', data.token)
+                window.location.href = 'memory.html';
+            } else {
+                console.log('JWT token niet gevonden')
+            }
+        })
+      }
+      
+      document.getElementById('submit').addEventListener('click', c => login_submit())
+  </script>
 </html>
