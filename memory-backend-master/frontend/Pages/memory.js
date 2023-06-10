@@ -341,7 +341,7 @@ function run() {
             var openCard2 = null
 
             for (var i = 0; i < cardCount; i++) {
-                const cardValue = cardsValues[i]
+                const cardValue = cardsValues[i];
             
                 (function() {
                     cards[i].addEventListener("click", function() {
@@ -384,13 +384,13 @@ function run() {
                         var isGameWon = true
                         for (var ii = 0; ii < cards.length; ii++) {
                             if (!isCardFound(cards[ii])) {
-                                isGameWon = false
+                                isGameWon = false;
                                 break
                             }
                         }
                         if (isGameWon) {
                             // Un-hide winning message
-                            document.getElementById("win-message").style.display = ''
+                            document.getElementById("win-message").style.display = '';
                         }
                     })
                 })()
