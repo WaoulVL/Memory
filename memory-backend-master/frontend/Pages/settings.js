@@ -45,9 +45,9 @@ function savePreferences() {
     const playerId = getPlayerIdFromJWT(jwtToken)
     const newEmail = document.getElementById("email").value
     const preferences = {
-        api: document.getElementById("apiPreference").value,
-        color_closed: document.getElementById("foundColorPreference").value,
-        color_found: document.getElementById("closedColorPreference").value
+        api: document.getElementById("card-type").value,
+        color_closed: document.getElementById("color-picker-found").value,
+        color_found: document.getElementById("color-picker-closed").value
     }
 
     const headers = createAPIHeaders()
@@ -65,15 +65,15 @@ function savePreferences() {
             body: JSON.stringify(preferences)
         })
     ])
-        .then(responses => {
-            const [emailResponse, preferencesResponse] = responses
+    .then(responses => {
+        const [emailResponse, preferencesResponse] = responses
 
-            if (emailResponse.ok && preferencesResponse.ok) {
-                redirectToMemory()
-            } else {
-                throw new Error('Failed to update email and preferences')
-            }
-        })
+        if (emailResponse.ok && preferencesResponse.ok) {
+            redirectToMemory()
+        } else {
+            throw new Error('Failed to update email and preferences')
+        }
+    })
 }
 
 function run() {
@@ -112,5 +112,24 @@ function run() {
 
         // Set email address in the text box
         document.getElementById('email').value = data.email
+    })
+    fetch(`http://localhost:8000/api/player/${id}/preferences`, {
+        method: 'GET',
+        headers: createAPIHeaders()
+    })
+    .then(response => response.json())
+    .then(preferences => {
+        const favoriteCards = preferences.preferred_api
+        const favoriteClosedColors = preferences.color_closed
+        const foundCardColors = preferences.color_found
+
+        const closedColorPicker = document.getElementById("color-picker-closed")
+        closedColorPicker.value = favoriteClosedColors
+
+        const foundColorPicker = document.getElementById("color-picker-found")
+        foundColorPicker.value = foundCardColors
+
+        const cardTypeSelect = document.getElementById("card-type")
+        cardTypeSelect.value = favoriteCards
     })
 }
