@@ -236,7 +236,7 @@ function loadData() {
         })
         .then(data => {
             // Display user data
-            document.getElementById('welcome-message').innerHTML = 'Welkom ' + data.name + '!'
+            document.getElementById('welcome-message').innerHTML = 'Welkom, ' + data.name + '!'
 
         })
 
