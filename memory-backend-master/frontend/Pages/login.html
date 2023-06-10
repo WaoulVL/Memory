@@ -56,9 +56,6 @@
       const passwordValue = document.getElementById("password").value
       const errorMessage = document.getElementById("error-message")
 
-      console.log(usernameValue)
-      console.log(passwordValue)
-
       fetch('http://localhost:8000/api/login_check', {
           method: 'POST',
           headers: {
