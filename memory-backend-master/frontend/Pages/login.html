@@ -39,7 +39,9 @@
 
           <label for="password"><b>Wachtwoord:</b></label>
           <input type="password" id="password" placeholder="Wachtwoord" name="password" required>
-              
+          
+          <p id="error-message" style="color: red; display: none;">Wachtwoord en/of gebruikersnaam onjuist!</p>
+
           <button type="button" id="submit">Login</button>
         </div>
       </form>
@@ -52,6 +54,7 @@
 
       const usernameValue = document.getElementById("username").value
       const passwordValue = document.getElementById("password").value
+      const errorMessage = document.getElementById("error-message")
 
       console.log(usernameValue)
       console.log(passwordValue)
@@ -69,9 +72,11 @@
       .then(response => {
           if (response.status === 200) {
               console.log('Inloggen gelukt')
+              errorMessage.style.display = ""
               return response.json()
           } else {
               console.log('Inloggen niet gelukt')
+              errorMessage.style.display = "block"
           }
       })
       .then(data => {
