@@ -43,49 +43,52 @@
         <label for="password_check"><b>Wachtwoord herhalen:</b></label>
         <input id="password_check" type="password" placeholder="Wachtwoord herhalen" name="password_check" required>
 
+        <p id="error-message" style="color: red; display: none;">Wachtwoorden komen niet overeen!</p>
+
         <label for="email"><b>Email:</b></label>
         <input id="email" type="text" placeholder="Email" name="email" required>
-            
+        
         <button type="button" id="submit">Registreer account</button>
       </div>
     </form>
   </body>
 
   <script> 
-      const register_submit = () => {
-        const usernameValue = document.getElementById("username").value
-        const passwordValue = document.getElementById("password").value
-        const passwordConfirmValue = document.getElementById("password_check").value
-        const emailValue = document.getElementById("email").value
+    const register_submit = () => {
+      const usernameValue = document.getElementById("username").value
+      const passwordValue = document.getElementById("password").value
+      const passwordConfirmValue = document.getElementById("password_check").value
+      const emailValue = document.getElementById("email").value
 
-        if (passwordValue != passwordConfirmValue) {
-            // Passwords don't match, notify user
-            //
-
-            return
-        }
-
-        event.preventDefault()
-        fetch('http://localhost:8000/register', {
-        method: 'POST',
-        body: JSON.stringify({
-            username: usernameValue,
-            email: emailValue,
-            password: passwordValue
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-        })
-        .then(response => {
-            if (response.status === 201) {
-                console.log('Registreren gelukt')
-                window.location.href = 'memory.html';
-            } else {
-                console.log('Registreren niet gelukt')
-            }
-        })
+      const errorMessage = document.getElementById("error-message")
+      if (passwordValue != passwordConfirmValue) {
+        errorMessage.style.display = "block"
+        return
+      } else {
+        errorMessage.style.display = ""
       }
+
+      event.preventDefault()
+      fetch('http://localhost:8000/register', {
+      method: 'POST',
+      body: JSON.stringify({
+          username: usernameValue,
+          email: emailValue,
+          password: passwordValue
+      }),
+      headers: {
+          'Content-Type': 'application/json'
+      }
+      })
+      .then(response => {
+          if (response.status === 201) {
+              console.log('Registreren gelukt')
+              window.location.href = 'memory.html';
+          } else {
+              console.log('Registreren niet gelukt')
+          }
+      })
+    }
       
       document.getElementById('submit').addEventListener('click', c => register_submit())
   </script>
