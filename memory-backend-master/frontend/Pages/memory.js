@@ -2,10 +2,10 @@
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+        var j = Math.floor(Math.random() * (i + 1))
+        var temp = array[i]
+        array[i] = array[j]
+        array[j] = temp
     }
 }
 
@@ -162,6 +162,11 @@ function updateColor() {
     document.documentElement.style.setProperty("--card-found-color", pickerFound.value);
 }
 
+function redirectToLogin() {
+    const notificationMessage = "Uw sessie is verlopen, log opnieuw in"
+    window.location.href = "login.html?message=" + encodeURIComponent(notificationMessage)
+}
+
 const createAPIHeaders = () => {
     const headers = {
         'Content-Type': 'application/json'
@@ -173,29 +178,54 @@ const createAPIHeaders = () => {
     return headers
 }
 
-function getPlayerIdFromJWT(jwtToken) {
-    const tokenParts = jwtToken.split('.')
-
-    const encodedPayload = tokenParts[1]
-    const decodedPayload = atob(encodedPayload)
-    const payload = JSON.parse(decodedPayload)
-
-    return payload.sub
+function getPayloadFromJWT(jwtToken) {
+    return JSON.parse(atob(jwtToken.split('.')[1]))
 }
 
-function loadUserData() {
+function getPlayerIdFromJWT(jwtToken) {
+    return getPayloadFromJWT(jwtToken).sub
+}
+
+function isTokenActive(jwtToken) {
+    return jwtToken && ((Date.now()) < (getPayloadFromJWT(jwtToken).exp * 1000))
+}
+
+function checkTokenExpiration(jwtToken) {
+    const tokenIsActive = isTokenActive(jwtToken)
+
+    // If token exists and became inactive, redirect user to login screen after deleting token
+    if (jwtToken && !tokenIsActive) {
+        localStorage.removeItem("jwtToken")
+        redirectToLogin()
+    }
+}
+
+function loadData() {
     const jwtToken = localStorage.getItem("jwtToken")
-    const isLoggedIn = jwtToken != null
+    const tokenIsActive = isTokenActive(jwtToken)
+
+    // Periodically check if existing token is still valid
+    if (tokenIsActive) {
+        checkTokenExpiration(jwtToken)
+        setInterval(() => {
+            checkTokenExpiration(jwtToken)
+        }, 1000)
+    }
 
     const loginBtn = document.getElementById("login_btn")
     const registerBtn = document.getElementById("register_btn")
     const logoutBtn = document.getElementById("logout_btn")
-    if (isLoggedIn) {
-        // Update user data
-        const id = getPlayerIdFromJWT(jwtToken)
-        const url = `http://localhost:8000/api/player/${id}`
+    const settings_btn = document.getElementById("settings_btn")
+    if (tokenIsActive) {
+        // Update button visibility
+        loginBtn.style.display = "none"
+        registerBtn.style.display = "none"
+        logoutBtn.style.display = ""
+        settings_btn.style.display = ""
 
-        fetch(url, {
+        // Retrieve user data
+        const id = getPlayerIdFromJWT(jwtToken)
+        fetch(`http://localhost:8000/api/player/${id}`, {
             method: 'GET',
             headers: createAPIHeaders()
         })
@@ -205,26 +235,63 @@ function loadUserData() {
             }
         })
         .then(data => {
+            // Display user data
             document.getElementById('welcome-message').innerHTML = 'Welkom ' + data.name + '!'
+
         })
 
-        // Update button visibility
-        loginBtn.style.display = "none"
-        registerBtn.style.display = "none"
-        logoutBtn.style.display = ""
+        fetch(`http://localhost:8000/api/player/${id}/preferences`, {
+            method: 'GET',
+            headers: createAPIHeaders()
+        })
+        .then(response => response.json())
+        .then(preferences => {
+            const favoriteCards = preferences.preferred_api
+            const favoriteClosedColors = preferences.color_closed
+            const foundCardColors = preferences.color_found
+
+            const closedColorPicker = document.getElementById("color-picker-closed")
+            closedColorPicker.value = favoriteClosedColors
+
+            const foundColorPicker = document.getElementById("color-picker-found")
+            foundColorPicker.value = foundCardColors
+
+            const cardTypeSelect = document.getElementById("card-type")
+            cardTypeSelect.value = favoriteCards
+        })
     } else {
         // Update button visibility
         loginBtn.style.display = ""
         registerBtn.style.display = ""
         logoutBtn.style.display = "none"
+        settings_btn.style.display = "none"
     }
+
+    const leaderboardList = document.getElementById("leaderboard-list")
+    fetch("http://localhost:8000/scores")
+    .then(response => response.json())
+    .then(scores => {
+        scores.sort((a, b) => a.score - b.score)
+    
+        leaderboardList.innerHTML = ""
+
+        scores.slice(0, 5).forEach((score, index) => {
+            const listItem = document.createElement("li")
+            listItem.textContent = `${index + 1}. ${score.username}: ${score.score}`
+            leaderboardList.appendChild(listItem)
+        })
+    })
+    .catch(error => {
+        console.error("Error fetching scores:", error)
+    })
 }
 
 function run() {
     const memoryContainer = document.getElementById("memory-container")
     const startButton = document.getElementById("start-button")
 
-    loadUserData()
+    // Load preferences, high scores and welcome message
+    loadData()
 
     // Start new game
     startButton.addEventListener("click", function() {
@@ -274,7 +341,7 @@ function run() {
             var openCard2 = null
 
             for (var i = 0; i < cardCount; i++) {
-                const cardValue = cardsValues[i];
+                const cardValue = cardsValues[i]
             
                 (function() {
                     cards[i].addEventListener("click", function() {
@@ -314,16 +381,16 @@ function run() {
                         }
                         
                         // Check if game has been won
-                        var isGameWon = true;
+                        var isGameWon = true
                         for (var ii = 0; ii < cards.length; ii++) {
                             if (!isCardFound(cards[ii])) {
-                                isGameWon = false;
+                                isGameWon = false
                                 break
                             }
                         }
                         if (isGameWon) {
                             // Un-hide winning message
-                            document.getElementById("win-message").style.display = '';
+                            document.getElementById("win-message").style.display = ''
                         }
                     })
                 })()
@@ -331,4 +398,3 @@ function run() {
         })
     })
 }
-

@@ -17,6 +17,9 @@
             function redirectToLogoutPage() {
                 window.location.href = "logout.html"
             }
+            function redirectToSettingsPage() {
+                window.location.href = "settings.html"
+            }
         </script>
     </head>
     <body onload="run()">
@@ -28,13 +31,9 @@
             <div class="container">
                 <p id="welcome-message">Log in om o.a. scores te kunnen zien en instellingen op te slaan</p>
                 <div>
-                    <!-- Button naar login -->
                     <button class="btn" id="login_btn"onclick="redirectToLoginPage()">Login</button>
-
-                    <!-- Register -->
                     <button class="btn" id="register_btn"onclick="redirectToRegisterPage()">Registreer</button>
-
-                    <!-- Logout -->
+                    <button class="btn" id="settings_btn"onclick="redirectToSettingsPage()">Voorkeuren</button>
                     <button class="btn" id="logout_btn"onclick="redirectToLogoutPage()">Uitloggen</button>
                 </div>
             </div>
@@ -50,12 +49,12 @@
 
                 <div id="top-players">
                     <h2>Top spelers</h2>
-                    <ul>
-                        <li>1. Bob: 100</li>
+                    <ul id="leaderboard-list">
+                        <!-- <li>1. Bob: 100</li>
                         <li>2. Henk: 200</li>
                         <li>3. Tobias: 300</li>
                         <li>4. Obama: 400</li>
-                        <li>5. Gert: 500</li>
+                        <li>5. Gert: 500</li> -->
                     </ul>
                     <p>Totaal gemiddelde speeltijd: 0.0s</p>
                 </div>

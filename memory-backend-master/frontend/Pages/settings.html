@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Instellingen</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="settings.js"></script>
+    </head>
+    <body onload="run()">
+        <div class="container">
+            <h1>Voorkeuren</h1>
+            <p id="username">Naam:</p>
+            <h2>Favoriete kaarten</h2>
+            <select id="apiPreference">
+                <option value="letters">Letters</option>
+                <option value="numbers">Nummers</option>
+                <option value="dogs" selected>Hondjes</option>
+                <option value="cats">Katten</option>
+            </select>
+
+            <h2>Favoriete kleur voor gevonden kaarten</h2>
+            <input type="color" id="foundColorPreference" value="#0000FF" />
+
+            <h2>Favoriete kleur voor gesloten kaarten</h2>
+            <input type="color" id="closedColorPreference" value="#008000" />
+
+            <h2>E-mailadres</h2>
+            <input type="email" id="email" value="" />
+
+            <button onclick="savePreferences()">Opslaan</button>
+        </div>
+    </body>
+</html>
