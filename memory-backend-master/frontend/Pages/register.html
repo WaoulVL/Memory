@@ -63,10 +63,12 @@
 
       const errorMessage = document.getElementById("error-message")
       if (passwordValue != passwordConfirmValue) {
-        errorMessage.style.display = "block"
+        // console.log("wachtwoorden komen niet overeen")
+        errorMessage.style.display = ""
         return
       } else {
-        errorMessage.style.display = ""
+        // console.log("wachtwoorden komen overeen")
+        errorMessage.style.display = "none"
       }
 
       event.preventDefault()

@@ -69,11 +69,11 @@
       .then(response => {
           if (response.status === 200) {
               console.log('Inloggen gelukt')
-              errorMessage.style.display = ""
+              errorMessage.style.display = "none"
               return response.json()
           } else {
               console.log('Inloggen niet gelukt')
-              errorMessage.style.display = "block"
+              errorMessage.style.display = ""
           }
       })
       .then(data => {
