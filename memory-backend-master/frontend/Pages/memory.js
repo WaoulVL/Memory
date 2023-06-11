@@ -281,7 +281,7 @@ function loadData() {
     
         leaderboardList.innerHTML = ""
 
-        scores.slice(0, 5).forEach((score, index) => {
+        scores.slice(0, 3).forEach((score, index) => {
             const listItem = document.createElement("li")
             listItem.textContent = `${index + 1}. ${score.username}: ${score.score}`
             leaderboardList.appendChild(listItem)
