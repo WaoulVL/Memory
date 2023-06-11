@@ -122,14 +122,20 @@ function run() {
         const favoriteCards = preferences.preferred_api
         const favoriteClosedColors = preferences.color_closed
         const foundCardColors = preferences.color_found
-
+    
         const closedColorPicker = document.getElementById("color-picker-closed")
-        closedColorPicker.value = favoriteClosedColors
-
+        if (favoriteClosedColors) {
+            closedColorPicker.value = favoriteClosedColors
+        }
+    
         const foundColorPicker = document.getElementById("color-picker-found")
-        foundColorPicker.value = foundCardColors
-
+        if (foundCardColors) {
+            foundColorPicker.value = foundCardColors
+        }
+    
         const cardTypeSelect = document.getElementById("card-type")
-        cardTypeSelect.value = favoriteCards
+        if (favoriteCards) {
+            cardTypeSelect.value = favoriteCards
+        }
     })
 }
