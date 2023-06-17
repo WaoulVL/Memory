@@ -1,11 +1,21 @@
-<p>
-Welcome to the visualisation component!
-</p>
-
 <div *ngIf="isLoggedIn">
-    <h1>User is logged in.</h1>
-</div>
-
-<div *ngIf="!isLoggedIn">
-    <h1>User is not logged in.</h1>
-</div>
+    <p>Welcome, you are logged in.</p>
+    <div *ngIf="aggregatedData">
+      <h2>Aggregated Data:</h2>
+      <ul>
+        <li *ngFor="let item of aggregatedData">
+          <ul>
+            <li *ngFor="let property of item | keyvalue">
+              {{ property.key }}: {{ property.value }}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="!aggregatedData">
+      <p>Loading aggregated data...</p>
+    </div>
+  </div>
+  <div *ngIf="!isLoggedIn">
+    <p>You are not logged in.</p>
+  </div>

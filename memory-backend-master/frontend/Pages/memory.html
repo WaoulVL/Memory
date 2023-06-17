@@ -20,6 +20,13 @@
             function redirectToSettingsPage() {
                 window.location.href = "settings.html"
             }
+            function redirectToAdministratorPage() {
+                const jwtToken = localStorage.getItem("jwtToken");
+                const url = `http://localhost:4200/visualisation?jwtToken=${jwtToken}`
+                if (jwtToken) {
+                    window.location.href = url
+                }
+            }
         </script>
     </head>
     <body onload="run()">
@@ -34,6 +41,7 @@
                     <button class="btn" id="login_btn"onclick="redirectToLoginPage()">Login</button>
                     <button class="btn" id="register_btn"onclick="redirectToRegisterPage()">Registreer</button>
                     <button class="btn" id="settings_btn"onclick="redirectToSettingsPage()">Voorkeuren</button>
+                    <button class="btn" id="admin_btn"onclick="redirectToAdministratorPage()">Administrator</button>
                     <button class="btn" id="logout_btn"onclick="redirectToLogoutPage()">Uitloggen</button>
                 </div>
             </div>
