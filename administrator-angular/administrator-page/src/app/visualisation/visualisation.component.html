@@ -1,21 +1,56 @@
 <div *ngIf="isLoggedIn">
-    <p>Welcome, you are logged in.</p>
-    <div *ngIf="aggregatedData">
-      <h2>Aggregated Data:</h2>
-      <ul>
-        <li *ngFor="let item of aggregatedData">
-          <ul>
-            <li *ngFor="let property of item | keyvalue">
-              {{ property.key }}: {{ property.value }}
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="!aggregatedData">
-      <p>Loading aggregated data...</p>
-    </div>
+  <p>{{ loginMessage }}</p>
+  <div *ngIf="aggregatedData">
+    <h2>Aggregated Data:</h2>
+    <ul>
+      <li *ngFor="let item of aggregatedData">
+        {{ item.key }}:
+        <ul>
+          <li *ngFor="let property of item | keyvalue">
+            {{ property.key }}: {{ property.value }}
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
-  <div *ngIf="!isLoggedIn">
-    <p>You are not logged in.</p>
+  <h2>API with Highest Aantal:</h2>
+  <p>{{ getApiWithHighestAantal() }}</p>
+  <div *ngIf="!aggregatedData">
+    <p>Loading aggregated data...</p>
   </div>
+  <div *ngIf="playerOverview">
+    <h2>Players Overview:</h2>
+    <ul>
+      <li *ngFor="let player of playerOverview; let i = index">
+        Username: {{ player.username }}
+        <br>
+        Email: {{ player.email }}
+        <br>
+        <!-- Add other player properties you want to display -->
+        <br>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="!playerOverview">
+    <p>Loading players overview...</p>
+  </div>
+  <div *ngIf="gameCount">
+    <h2>Game Counts per Day:</h2>
+    <ul>
+      <li *ngFor="let count of gameCount | keyvalue">
+        Date: {{ count.key }}
+        <br>
+        Count: {{ count.value }}
+        <br>
+        <br>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="!gameCount">
+    <p>Loading game counts per day...</p>
+  </div>
+</div>
+
+<div *ngIf="!isLoggedIn">
+  <p>{{ loginMessage }}</p>
+</div>

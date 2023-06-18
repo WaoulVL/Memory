@@ -190,6 +190,10 @@ function isTokenActive(jwtToken) {
     return jwtToken && ((Date.now()) < (getPayloadFromJWT(jwtToken).exp * 1000))
 }
 
+function isAdminToken(jwtToken) {
+    return jwtToken && getPayloadFromJWT(jwtToken).roles.includes("ROLE_ADMIN")
+}
+
 function checkTokenExpiration(jwtToken) {
     const tokenIsActive = isTokenActive(jwtToken)
 
@@ -203,6 +207,7 @@ function checkTokenExpiration(jwtToken) {
 function loadData() {
     const jwtToken = localStorage.getItem("jwtToken")
     const tokenIsActive = isTokenActive(jwtToken)
+    const tokenIsAdmin = isAdminToken(jwtToken)
 
     // Periodically check if existing token is still valid
     if (tokenIsActive) {
@@ -216,6 +221,7 @@ function loadData() {
     const registerBtn = document.getElementById("register_btn")
     const logoutBtn = document.getElementById("logout_btn")
     const settings_btn = document.getElementById("settings_btn")
+    const admin_btn = document.getElementById("admin_btn")
     if (tokenIsActive) {
         // Update button visibility
         loginBtn.style.display = "none"
@@ -271,6 +277,12 @@ function loadData() {
         registerBtn.style.display = ""
         logoutBtn.style.display = "none"
         settings_btn.style.display = "none"
+    }
+
+    if (tokenIsAdmin) {
+        admin_btn.style.display = ""
+    } else {
+        admin_btn.style.display = "none"
     }
 
     const leaderboardList = document.getElementById("leaderboard-list")
