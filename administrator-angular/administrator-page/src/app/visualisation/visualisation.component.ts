@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-visualisation',
@@ -13,6 +14,11 @@ export class VisualisationComponent implements OnInit {
   playerOverview: any;
   gameCount: any;
   loginMessage: string | undefined;
+
+  @Input() inputData: any; 
+
+  @Output() dataEvent = new EventEmitter<any>(); // Example
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -37,7 +43,11 @@ export class VisualisationComponent implements OnInit {
       .subscribe(
         (response: any) => {
           this.aggregatedData = response;
+          this.sortAggregatedData();
           console.log('Aggregated Data:', this.aggregatedData);
+          
+          const chosenApi = this.getApiWithHighestAantal();
+          console.log('Chosen API:', chosenApi);
         },
         (error: any) => {
           console.error('Error fetching aggregated data:', error);
@@ -47,7 +57,7 @@ export class VisualisationComponent implements OnInit {
 
   getPlayersOverview(jwtToken: string) {
     const apiHeaders = this.createAPIHeaders(jwtToken);
-  
+
     this.http.get('http://localhost:8000/api/admin/players', { headers: apiHeaders })
       .subscribe(
         (response: any) => {
@@ -61,10 +71,10 @@ export class VisualisationComponent implements OnInit {
         }
       );
   }
-  
+
   getGameCountsPerDay(jwtToken: string) {
     const apiHeaders = this.createAPIHeaders(jwtToken);
-  
+
     this.http.get('http://localhost:8000/api/admin/dates', { headers: apiHeaders })
       .subscribe(
         (response: any) => {
@@ -78,31 +88,26 @@ export class VisualisationComponent implements OnInit {
         }
       );
   }
-  
-  // ...
 
   getApiWithHighestAantal(): string | null {
-    // if (this.aggregatedData && this.aggregatedData.length > 0) {
-    //   let maxAantal = this.aggregatedData[0].aantal;
-    //   let apiWithMaxAantal = this.aggregatedData[0].api;
-  
-    //   for (let i = 1; i < this.aggregatedData.length; i++) {
-    //     if (this.aggregatedData[i].aantal > maxAantal) {
-    //       maxAantal = this.aggregatedData[i].aantal;
-    //       apiWithMaxAantal = this.aggregatedData[i].api;
-    //     }
-    //   }
-  
-    //   console.log(`API with highest aantal: ${apiWithMaxAantal}`);
-    //   return apiWithMaxAantal;
-    // }
-    console.log("Aggregated data below:")
-    console.log(this.aggregatedData)
-    let data = this.aggregatedData
-    data.sort((a: { aantal: number; }, b: { aantal: number; }) => b.aantal - a.aantal);
-    return data[data.length - 1];
+    let apiData = this.aggregatedData[2]
+    if (apiData && apiData.length > 0) {
+      let maxAantal = apiData[0].aantal;
+      let apiWithMaxAantal = apiData[0].api;
+
+      for (let i = 1; i < apiData.length; i++) {
+        if (apiData[i].aantal > maxAantal) {
+          maxAantal = apiData[i].aantal;
+          apiWithMaxAantal = apiData[i].api;
+        }
+      }
+
+      console.log(`API with highest aantal: ${apiWithMaxAantal}`);
+      return apiWithMaxAantal;
+    }
+
+    return null;
   }
-  
 
   createAPIHeaders(jwtToken: string | null): { 'Content-Type': string; Authorization?: string } {
     const headers: { 'Content-Type': string; Authorization?: string } = {
@@ -114,5 +119,15 @@ export class VisualisationComponent implements OnInit {
     }
 
     return headers;
+  }
+
+  sortAggregatedData() {
+    if (this.aggregatedData && this.aggregatedData[2]) {
+      this.aggregatedData[2].sort((a: any, b: any) => b.aantal - a.aantal);
+    }
+  }
+
+  sendDataToParent() {
+    this.dataEvent.emit('Data to be sent to parent'); // Emit the event with data
   }
 }

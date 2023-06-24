@@ -13,8 +13,6 @@
       </li>
     </ul>
   </div>
-  <h2>API with Highest Aantal:</h2>
-  <p>{{ getApiWithHighestAantal() }}</p>
   <div *ngIf="!aggregatedData">
     <p>Loading aggregated data...</p>
   </div>
@@ -26,11 +24,24 @@
         <br>
         Email: {{ player.email }}
         <br>
-        <!-- Add other player properties you want to display -->
-        <br>
       </li>
     </ul>
   </div>
+
+  <h2>API Usage Overview:</h2>
+  <table>
+    <tr>
+      <th>API</th>
+      <th>Count</th>
+    </tr>
+    <ng-container *ngIf="aggregatedData && aggregatedData[2]">
+      <tr *ngFor="let item of aggregatedData[2]">
+        <td>{{ item.api }}</td>
+        <td>{{ item.aantal }}</td>
+      </tr>
+    </ng-container>
+  </table>
+
   <div *ngIf="!playerOverview">
     <p>Loading players overview...</p>
   </div>
