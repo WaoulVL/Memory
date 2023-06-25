@@ -1,25 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DataService } from './data.service';
 
 @Injectable()
 export class GameCountsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private dataService: DataService) {}
 
   getGameCountsPerDay(jwtToken: string) {
-    const apiHeaders = this.createAPIHeaders(jwtToken);
+    const apiHeaders = this.dataService.createAPIHeaders(jwtToken);
 
     return this.http.get('http://localhost:8000/api/admin/dates', { headers: apiHeaders });
-  }
-
-  private createAPIHeaders(jwtToken: string | null): { 'Content-Type': string; Authorization?: string } {
-    const headers: { 'Content-Type': string; Authorization?: string } = {
-        'Content-Type': 'application/json'
-      };
-  
-      if (jwtToken) {
-        headers['Authorization'] = `Bearer ${jwtToken}`;
-      }
-  
-      return headers;
   }
 }
