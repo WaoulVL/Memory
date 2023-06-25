@@ -12,6 +12,12 @@ export class DataService {
     return this.http.get('http://localhost:8000/api/admin/aggregate', { headers: apiHeaders });
   }
 
+  sortAggregatedData(aggregatedData: any) {
+    if (aggregatedData && aggregatedData[2]) {
+      aggregatedData[2].sort((a: any, b: any) => b.aantal - a.aantal);
+    }
+  }
+
   getPlayersOverview(jwtToken: string) {
     const apiHeaders = this.createAPIHeaders(jwtToken);
     return this.http.get('http://localhost:8000/api/admin/players', { headers: apiHeaders });
@@ -32,11 +38,5 @@ export class DataService {
     }
 
     return headers;
-  }
-
-  sortAggregatedData(aggregatedData: any) {
-    if (aggregatedData && aggregatedData[2]) {
-      aggregatedData[2].sort((a: any, b: any) => b.aantal - a.aantal);
-    }
   }
 }
