@@ -27,11 +27,11 @@ export class VisualisationComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
-      const jwtToken = params.get('jwtToken');
+      const jwtToken = localStorage.getItem('jwtToken')
       this.isLoggedIn = !!jwtToken;
       this.loginMessage = this.isLoggedIn ? 'Welcome, you are logged in.' : 'You are not logged in.';
       if (!this.isLoggedIn) {
-        window.location.href = 'http://localhost:8080/login.html';
+        window.location.href = 'http://localhost:4200/login';
       } else {
         if (jwtToken) {
           this.dataService.getAggregatedData(jwtToken)

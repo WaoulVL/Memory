@@ -21,11 +21,7 @@
                 window.location.href = "settings.html"
             }
             function redirectToAdministratorPage() {
-                const jwtToken = localStorage.getItem("jwtToken");
-                const url = `http://localhost:4200/visualisation?jwtToken=${jwtToken}`
-                if (jwtToken) {
-                    window.location.href = url
-                }
+                window.location.href = "http://localhost:4200/login"
             }
         </script>
     </head>
