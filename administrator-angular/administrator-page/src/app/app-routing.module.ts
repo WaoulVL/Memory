@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VisualisationComponent } from './visualisation/visualisation.component';
-import { LoginComponent } from './login/login.component';
+import { VisualisationComponent } from './components/visualisation/visualisation.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   { path: 'visualisation', component: VisualisationComponent },

@@ -1,0 +1,20 @@
+<h2>Players Overview</h2>
+<div *ngIf="playerOverview">
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let player of playerOverview; let i = index">
+        <td>{{ player.username }}</td>
+        <td>{{ player.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="!playerOverview">
+  <p class="loading-message">Loading players overview...</p>
+</div>

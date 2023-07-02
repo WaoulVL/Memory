@@ -1,0 +1,16 @@
+<h2>API Usage Overview</h2>
+<div *ngIf="aggregatedData && aggregatedData[2]">
+  <ngx-charts-bar-horizontal
+    [view]="[800, 400]"
+    [results]="getChartData()"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+  >
+  </ngx-charts-bar-horizontal>
+</div>
+<div *ngIf="!(aggregatedData && aggregatedData[2])">
+  <p class="loading-message">Loading API overview...</p>
+</div>

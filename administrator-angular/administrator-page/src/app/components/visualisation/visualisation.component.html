@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="administrator-container" *ngIf="isLoggedIn">
+    <p class="login-message">{{ loginMessage }}</p>
+
+    <!-- Statistics -->
+    <app-statistics [aggregatedData]="aggregatedData"></app-statistics>
+
+    <!-- API Usage Overview -->
+    <app-api-usage-overview [aggregatedData]="aggregatedData"></app-api-usage-overview>
+
+    <!-- Game Counts per Day -->
+    <app-game-counts [gameCount]="gameCount"></app-game-counts>
+
+    <!-- Players Overview -->
+    <app-players-overview [playerOverview]="playerOverview"></app-players-overview>
+
+  <div *ngIf="!isLoggedIn" class="isLoggedIn-container">
+    <p class="login-message">{{ loginMessage }}</p>
+  </div>
+</div>

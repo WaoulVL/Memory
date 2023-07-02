@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { DataService } from './data.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-visualisation',
@@ -35,29 +35,23 @@ export class VisualisationComponent implements OnInit {
       } else {
         if (jwtToken) {
           this.dataService.getAggregatedData(jwtToken)
-            .subscribe(
-              (response: any) => {
-                this.aggregatedData = response;
-                this.dataService.sortAggregatedData(this.aggregatedData);
-                console.log('Aggregated Data:', this.aggregatedData);
-              }
-            );
+            .subscribe((response: any) => {
+              this.aggregatedData = response;
+              this.dataService.sortAggregatedData(this.aggregatedData);
+              console.log('Aggregated Data:', this.aggregatedData);
+            });
 
           this.dataService.getPlayersOverview(jwtToken)
-            .subscribe(
-              (response: any) => {
-                this.playerOverview = response;
-                console.log('Players Overview:', this.playerOverview);
-              }
-            );
+            .subscribe((response: any) => {
+              this.playerOverview = response;
+              console.log('Players Overview:', this.playerOverview);
+            });
 
           this.dataService.getGameCountsPerDay(jwtToken)
-            .subscribe(
-              (response: any) => {
-                this.gameCount = response;
-                console.log('Game Counts per Day:', this.gameCount);
-              }
-            );
+            .subscribe((response: any) => {
+              this.gameCount = response;
+              console.log('Game Counts per Day:', this.gameCount);
+            });
         }
       }
     });
