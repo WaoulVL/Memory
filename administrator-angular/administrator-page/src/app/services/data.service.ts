@@ -5,11 +5,13 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class DataService {
+  private readonly apiEndpoint = 'http://localhost:8000/api/admin';
+
   constructor(private http: HttpClient) {}
 
   getAggregatedData(jwtToken: string) {
     const apiHeaders = this.createAPIHeaders(jwtToken);
-    return this.http.get('http://localhost:8000/api/admin/aggregate', { headers: apiHeaders });
+    return this.http.get(`${this.apiEndpoint}/aggregate`, { headers: apiHeaders });
   }
 
   sortAggregatedData(aggregatedData: any) {
@@ -20,15 +22,15 @@ export class DataService {
 
   getPlayersOverview(jwtToken: string) {
     const apiHeaders = this.createAPIHeaders(jwtToken);
-    return this.http.get('http://localhost:8000/api/admin/players', { headers: apiHeaders });
+    return this.http.get(`${this.apiEndpoint}/players`, { headers: apiHeaders });
   }
 
   getGameCountsPerDay(jwtToken: string) {
     const apiHeaders = this.createAPIHeaders(jwtToken);
-    return this.http.get('http://localhost:8000/api/admin/dates', { headers: apiHeaders });
+    return this.http.get(`${this.apiEndpoint}/dates`, { headers: apiHeaders });
   }
 
-  createAPIHeaders(jwtToken: string | null): { 'Content-Type': string; Authorization?: string } {
+  private createAPIHeaders(jwtToken: string | null): { 'Content-Type': string; Authorization?: string } {
     const headers: { 'Content-Type': string; Authorization?: string } = {
       'Content-Type': 'application/json'
     };

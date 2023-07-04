@@ -1,5 +1,5 @@
 <h2>Game Counts per Day</h2>
-<div *ngIf="gameCount">
+<div *ngIf="gameCount && showGameCount">
   <table>
     <thead>
       <tr>
@@ -17,4 +17,7 @@
 </div>
 <div *ngIf="!gameCount">
   <p class="loading-message">Loading game count overview...</p>
+</div>
+<div *ngIf="gameCount">
+  <button (click)="toggleGameCount()">Show/Hide Game Counts</button>
 </div>

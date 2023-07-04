@@ -7,4 +7,9 @@ import { Component, Input } from '@angular/core';
 })
 export class PlayersOverviewComponent {
   @Input() playerOverview: any;
+  showPlayerOverview = false;
+
+  togglePlayerOverview() {
+    this.showPlayerOverview = !this.showPlayerOverview;
+  }
 }

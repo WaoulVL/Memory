@@ -7,4 +7,9 @@ import { Component, Input } from '@angular/core';
 })
 export class GameCountsComponent {
   @Input() gameCount: any;
+  showGameCount = false;
+
+  toggleGameCount() {
+    this.showGameCount = !this.showGameCount;
+  }
 }

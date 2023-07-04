@@ -57,13 +57,22 @@
 
   .back-button {
     background-color: #ffffff;
+    border: 1px solid #1976d2;
     border-radius: 4px;
-    padding: 8px;
+    padding: 8px 16px;
     color: #1976d2;
     text-decoration: none;
     margin-right: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
   .back-button:hover {
     background-color: #c2d1df;
+    color: #1565c0;
+    border-color: #1565c0;
+  }
+
+  .back-button:focus {
+    outline: none;
   }

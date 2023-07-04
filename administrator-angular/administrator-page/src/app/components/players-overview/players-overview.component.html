@@ -1,5 +1,5 @@
 <h2>Players Overview</h2>
-<div *ngIf="playerOverview">
+<div *ngIf="showPlayerOverview">
   <table>
     <thead>
       <tr>
@@ -15,6 +15,9 @@
     </tbody>
   </table>
 </div>
-<div *ngIf="!playerOverview">
+<div *ngIf="!showPlayerOverview && !playerOverview">
   <p class="loading-message">Loading players overview...</p>
+</div>
+<div *ngIf="playerOverview && playerOverview.length > 0">
+  <button (click)="togglePlayerOverview()">Show/Hide Players Overview</button>
 </div>
